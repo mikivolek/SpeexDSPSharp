@@ -16,6 +16,62 @@ namespace SpeexDSPSharp.Core
         private const string DllName = "speexdsp";
 #endif
 
+
+        /// <summary>
+        /// Destroys a previously initialized Speex resampler instance, releasing the associated resources.
+        /// </summary>
+        /// <param name="st">A pointer to the resampler instance to be destroyed.</param>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void speex_resampler_destroy(IntPtr st);
+
+
+        /// <summary>
+        /// Processes interleaved float audio data through the Speex resampler instance.
+        /// </summary>
+        /// <param name="st">A safe handler pointing to the resampler instance.</param>
+        /// <param name="input">A pointer to the input interleaved float audio buffer.</param>
+        /// <param name="in_len">A pointer to the input buffer length in samples.</param>
+        /// <param name="output">A pointer to the output interleaved float audio buffer.</param>
+        /// <param name="out_len">A pointer to the output buffer length in samples.</param>
+        /// <returns>An integer error code indicating the status of the resampling process.</returns>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern unsafe int speex_resampler_process_interleaved_float(
+            SpeedxDSPResamplerSafeHandler st, float* input, int* in_len, float* output, int* out_len);
+        
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="st"></param>
+        /// <param name="channel_index"></param>
+        /// <param name="input"></param>
+        /// <param name="in_len"></param>
+        /// <param name="output"></param>
+        /// <param name="out_len"></param>
+        /// <returns></returns>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern unsafe int speex_resampler_process_int(
+            SpeedxDSPResamplerSafeHandler st, 
+            int channel_index, 
+            short* input, 
+            int* in_len, 
+            short* output, 
+            int* out_len);
+
+
+        /// <summary>
+        /// Initializes a Speex resampler instance with the specified parameters.
+        /// </summary>
+        /// <param name="channels">The number of audio channels.</param>
+        /// <param name="in_rate">The input sample rate.</param>
+        /// <param name="out_rate">The output sample rate.</param>
+        /// <param name="quality">The desired quality level of resampling, typically between 0 (worst) and 10 (best).</param>
+        /// <param name="ptr">Pointer to an integer that will hold an error code or null for default error handling.</param>
+        /// <returns>A safe handler for the Speex resampler instance.</returns>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern unsafe SpeedxDSPResamplerSafeHandler speex_resampler_init(int channels, int in_rate, int
+            out_rate, int quality, void* ptr);
+        
         //Jitter Buffer
         /// <summary>
         /// Initializes jitter buffer.
